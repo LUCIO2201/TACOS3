@@ -1,0 +1,42 @@
+import vista.LoginFrame;
+import util.ConexionDB; // 1. Importa la clase de conexión
+import java.sql.Connection; // 2. Importa la clase Connection
+import javax.swing.SwingUtilities;
+
+public class Main {
+    public static void main(String[] args) {
+
+        // --- INICIO DE LA PRUEBA DE CONEXIÓN ---
+        System.out.println("Intentando conectar a la base de datos...");
+        Connection conn = ConexionDB.getConexion();
+
+        if (conn != null) {
+            System.out.println("¡Éxito! Conexión a la base de datos establecida.");
+            try {
+                conn.close(); // Cierra la conexión de prueba
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Si la conexión fue exitosa, lanza el Login
+            lanzarAplicacion();
+
+        } else {
+            // Si conn es null, la conexión falló (el error ya se imprimió)
+            System.err.println("FALLO LA CONEXIÓN. Revisa tu servidor MySQL y los datos en ConexionDB.java");
+            // Aquí podrías mostrar un JOptionPane si quisieras
+        }
+        // --- FIN DE LA PRUEBA DE CONEXIÓN ---
+    }
+
+    // Método para lanzar la aplicación
+    private static void lanzarAplicacion() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                // Inicia la ventana de Login
+                new LoginFrame().setVisible(true);
+            }
+        });
+    }
+}
